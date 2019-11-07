@@ -161,7 +161,7 @@ To access the protected resources, need to setup a service account which uses se
 
 **Generate API Key**
 
-– To generate API key using IBM Cloud Dashboard, follow the insrtuctions given [here](https://cloud.ibm.com/docs/iam?topic=iam-userapikey#create_user_key). Else, you can use the following CLI command to create API key.
+– To generate API key using IBM Cloud Dashboard, follow the instructions given [here](https://cloud.ibm.com/docs/iam?topic=iam-userapikey#create_user_key). Else, you can use the following CLI command to create API key.
 
 ```
   ibmcloud iam api-key-create MyKey -d "this is my API key" --file key_file.json
