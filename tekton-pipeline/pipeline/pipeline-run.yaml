@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
   name: application-pipeline-run
-  # generateName: application-pr-
 spec:
   pipelineRef:
     name: create-pipeline
@@ -14,9 +13,7 @@ spec:
     - name: pathToYamlFile
       value: "deploy.yaml"
     - name: "imageUrl"
-      value: "us.icr.io/test_s1/builtapp"
+      value: "IAMGE_URL"
     - name: "imageTag"
       value: "latest"
-  # trigger:
-  #   type: manual
   serviceAccount: service-account
