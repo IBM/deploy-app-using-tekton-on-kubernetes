@@ -21,7 +21,7 @@ To complete this tutorial, you will need:
   ```
 * Configure [Git CLI](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). Clone the repository using the command below:
   ```
-  git clone <>
+  git clone https://github.com/IBM/deploy-app-using-tekton-on-kubernetes.git
   ```
   
   > Note: You should clone this repository to your workstation since you will need to edit some of the files before using them.
