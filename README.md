@@ -82,7 +82,7 @@ For example, deploy target for US-South region will be:
 
 Get the public IP of Kubernetes Cluster on IBM Cloud and access the application on 32426 port as this port is used in deploy.yaml.
 ```
-  https://<public-ip-of kubernetes-cluster>:32426/
+  http://<public-ip-of kubernetes-cluster>:32426/
 ```
 
 Once application is deployed and you need to make any changes, then you have to re-run the steps again. In order to build, test, and deploy application faster and more reliably, need to automate the entire workflow. We should follow the modern development practices that is continuous integration and delivery (CI/CD) as it reduces the overhead of development and deployment process and saves significant time and effort.
@@ -112,11 +112,11 @@ The installation creates two pods which can be checked using the following comma
   kubectl get pods --namespace tekton-pipelines
 ```
 
-More information is available at [here](https://github.com/tektoncd/pipeline/blob/master/docs/install.md#adding-the-tekton-pipelines). You are now ready to create and run Tekton Pipelines. Let’s start creating the custom resources' definition.
+More information is available [here](https://github.com/tektoncd/pipeline/blob/master/docs/install.md#adding-the-tekton-pipelines). You are now ready to create and run Tekton Pipelines. Let’s start creating the custom resources' definition.
 
 **Create Pipeline Resource**
 
-In this example, the source code of your application is available in github repository. Hence, need to create the pipeline resource to access the git repository. Here we can configure the url of github repository and the branch of the repository.
+In this example, the source code of the application is available in github repository. Hence, need to create the pipeline resource to access the git repository. Here we can configure the url of github repository and the branch of the repository.
 The complete YAML file is available at `tekton-pipeline/resources/git.yaml`. Apply the file to your cluster.
 
 ```
@@ -263,7 +263,7 @@ To verify result, run:
 
 Get the public IP of Kubernetes Cluster on IBM Cloud and access the application on 32426 port as this port is used in deploy.yaml.
 ```
-  https://<public-ip-of kubernetes-cluster>:32426/
+  http://<public-ip-of kubernetes-cluster>:32426/
 ```
 
 ## Summary
