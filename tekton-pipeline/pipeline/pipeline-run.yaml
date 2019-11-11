@@ -15,5 +15,5 @@ spec:
     - name: "imageUrl"
       value: "IMAGE_URL"
     - name: "imageTag"
-      value: "latest"
+      value: "IMAGE_TAG"
   serviceAccount: service-account
