@@ -1,0 +1,47 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: create-pipeline
+spec:
+  resources:
+    - name: git-source
+      type: git
+  params:
+    - name: pathToYamlFile
+      description: The path to the yaml file to deploy within the git source
+      default: deploy.yaml
+    - name: imageUrl
+      description: Url of image repository
+      default: deploy_target
+    - name: imageTag
+      description: Tag to apply to the built image
+      default: latest
+  tasks:
+  - name: build-image-from-source
+    taskRef:
+      name: build-image-from-source
+    params:
+      - name: imageUrl
+        value: "$(params.imageUrl)"
+      - name: imageTag
+        value: "$(params.imageTag)"
+    resources:
+      inputs:
+        - name: git-source
+          resource: git-source
+  - name: deploy-application
+    taskRef:
+      name: deploy-application
+    runAfter:
+      - build-image-from-source
+    params:
+      - name: pathToYamlFile
+        value: "$(params.pathToYamlFile)"
+      - name: imageUrl
+        value: "$(params.imageUrl)"
+      - name: imageTag
+        value: "$(params.imageTag)"
+    resources:
+      inputs:
+        - name: git-source
+          resource: git-source
