@@ -13,7 +13,7 @@ spec:
     - name: pathToYamlFile
       value: "deploy.yaml"
     - name: "imageUrl"
-      value: "IAMGE_URL"
+      value: "IMAGE_URL"
     - name: "imageTag"
       value: "latest"
   serviceAccount: service-account
