@@ -13,9 +13,9 @@ To complete this tutorial, you will need:
 * Get an instance of [Kubernetes Service on IBM Cloud](https://cloud.ibm.com/kubernetes/catalog/cluster). It will take ~20 minutes.
 * Get the access of IKS through `kubectl` CLI using the instructions provided in access tab at:
   ```
-  IBM Cloud Dashboard -> <your cluster> -> Access
+  IBM Cloud Dashboard -> <your cluster> -> Access Tab
   ```
-* Create (if not already) private container registry on IBM Cloud container registry. It can be accessed at:
+* Create (if not already) namespace on IBM Cloud container registry. It can be accessed at:
   ```
   IBM Cloud Dashboard -> Click on Navigation Menu -> Kubernetes -> Registry -> Namespaces
   ```
