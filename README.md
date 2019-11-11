@@ -196,11 +196,11 @@ A role binding grants the permissions defined in a role to a user or set of user
 ```
 **Run the Pipeline**
 
-Modify `imageUrl` and `imageTag` in `pipelinerun.yaml`. Refer `Setup Deploy Target` section above to decide on image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *latest*, then update configuration file as:
+Modify `imageUrl` and `imageTag` in `pipeline/pipelinerun.yaml`. Refer `Setup Deploy Target` section above to decide on image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *latest*, then update configuration file as:
 
 ```
-  sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipelinerun.yaml
-  sed -i '' s#IMAGE_TAG#latest# pipelinerun.yaml
+  sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipeline/pipelinerun.yaml
+  sed -i '' s#IMAGE_TAG#latest# pipeline/pipelinerun.yaml
 ```
 
 Now, at the end run the pipeline.
