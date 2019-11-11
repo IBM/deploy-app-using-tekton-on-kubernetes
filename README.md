@@ -222,6 +222,10 @@ Status:
     Reason:                Running
     Status:                Unknown
     Type:                  Succeeded
+  
+   ...
+   ...
+   Events:              <none>
 ```
 
 Once completed, you should see following message on your terminal:
