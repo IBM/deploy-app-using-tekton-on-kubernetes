@@ -215,6 +215,13 @@ To check the status of the pipeline created,
 You may need to re-run this command till pipeline execution is not completed. It will show you interim status like:
 
 ```
+Status:
+  Conditions:
+    Last Transition Time:  2019-11-11T06:51:06Z
+    Message:               Not all Tasks in the Pipeline have finished executing
+    Reason:                Running
+    Status:                Unknown
+    Type:                  Succeeded
 ```
 
 Once completed, you should see following message on your terminal:
