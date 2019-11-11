@@ -24,10 +24,10 @@ To complete this tutorial, you will need:
   git clone https://github.com/IBM/deploy-app-using-tekton-on-kubernetes.git
   ```
   
-  > Note: You should clone this repository to your workstation since you will need to edit some of the files before using them.
+  > Note: You should clone this repository to your workstation since you need to edit some of the files before using them.
   
 ## Estimated Time
-This tutorial takes about 30 minutes, after pre-requisites configuration.
+This tutorial takes about 40 minutes, after pre-requisites configuration.
 
 ## Section 1 - To build and deploy an application on Kubernetes Service using kubectl
 
@@ -155,9 +155,9 @@ Pipeline custom resource lists the tasks to be executed and provides the input a
   kubectl apply -f pipeline/pipeline.yaml
 ```
 
-**Create Pipelinerun**
+**Create PipelineRun**
 
-All other required resources has been created now. To start executing the pipeline we need a Pipelinerun custom resource definition. All required parameters will be passed from PipelineRun. It will trigger Pipeline, Pipeline will trigger Task and so on and hence parameters will be passed to the corresponding task. To execute the pipeline, all resources must be applied first, and then pipelinerun can be created. 
+All other required resources has been created now. To run the pipeline we need a PipelineRun custom resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, further Pipeline will create TaskRuns and so on. In the similar manner parameters will be substituted to the corresponding task.
 
 The important point to note here is that through pipeline we push images to registry and deploying into cluster, so we need to ensure that it has the sufficient and all required permissions to access container registry and the cluster. The credentials for the registry will be provided by a ServiceAccount. Hence, let us define a service account before executing Pipelinerun.
 
@@ -184,7 +184,7 @@ To access the protected resources, need to setup a service account which uses se
 
 where,
 * < APIKEY > is the one that you created
-* < REGISTRY > is the URL of your container registry, for example us.icr.io 
+* < REGISTRY > is the registry API endpoint for your cluster, for example us.icr.io 
 
 It creates a secret named as `ibm-cr-secret` which will be used in configuration file for service account.
 
@@ -195,6 +195,13 @@ A role binding grants the permissions defined in a role to a user or set of user
   kubectl apply -f pipeline/service-account.yaml
 ```
 **Run the Pipeline**
+
+Modify `imageUrl` and `imageTag` in `pipelinerun.yaml`. Refer `Setup Deploy Target` section above to decide on image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *latest*, then update configuration file as:
+
+```
+  sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipelinerun.yaml
+  sed -i '' s#IMAGE_TAG#latest# pipelinerun.yaml
+```
 
 Now, at the end run the pipeline.
 
@@ -228,7 +235,7 @@ Status:
    Events:              <none>
 ```
 
-Once completed, you should see following message on your terminal:
+Once completed, you should see the following message on your terminal:
 
 ```
 Status:
@@ -254,7 +261,7 @@ If it fails, then it shows which task has been failed and also give you more det
 ```
 
 **Verify Result**
-To verify result, run:
+To verify whether pod and service named as `app` is running, run the following commands:
 
 ```
   kubectl get pods
