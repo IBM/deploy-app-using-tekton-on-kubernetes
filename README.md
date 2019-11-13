@@ -261,12 +261,23 @@ If it fails, then it shows which task has been failed and also give you more det
 ```
 
 **Verify Result**
-To verify whether pod and service named as `app` is running, run the following commands:
 
-```
-  kubectl get pods
-  kubectl get service
-```
+To verify whether pod and service is running as expected, check the output of the following commands.
+
+<pre>
+  <b>kubectl get pods</b>
+  # Output should be something like this
+    NAME                                                                READY   STATUS      RESTARTS   AGE
+    app-59dff7b655-7ggbt                                                1/1     Running     0          81s
+    application-pipeline-run-build-image-from-source-2m62g-pod-f4eb96   0/3     Completed   0          119s
+    application-pipeline-run-deploy-application-kg2jm-pod-89f884        0/3     Completed   0          89s
+
+  <b>kubectl get service</b>
+  # Output 
+    NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+    app          NodePort    xxx.xx.xx.xxx   <none>        3300:32426/TCP   4m51s
+
+</pre>
 
 Get the public IP of Kubernetes Cluster on IBM Cloud and access the application on 32426 port as this port is used in deploy.yaml.
 ```
