@@ -15,7 +15,7 @@ spec:
     - name: pathToYamlFile
       value: "deploy.yaml"
     - name: "imageUrl"
-      value: "us.icr.io/test_s1/builtapp"
+      value: "IMAGE_URL"
     - name: "imageTag"
-      value: "1.1"
+      value: "IMAGE_TAG"
   serviceAccount: service-account
