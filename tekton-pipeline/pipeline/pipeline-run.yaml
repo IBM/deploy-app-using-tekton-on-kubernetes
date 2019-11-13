@@ -10,10 +10,12 @@ spec:
       resourceRef:
         name: git
   params:
+    - name: pathToContext
+      value: "src"
     - name: pathToYamlFile
       value: "deploy.yaml"
     - name: "imageUrl"
-      value: "IMAGE_URL"
+      value: "us.icr.io/test_s1/builtapp"
     - name: "imageTag"
-      value: "IMAGE_TAG"
+      value: "1.1"
   serviceAccount: service-account

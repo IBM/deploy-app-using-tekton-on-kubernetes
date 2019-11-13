@@ -7,9 +7,12 @@ spec:
     - name: git-source
       type: git
   params:
+    - name: pathToContext
+      description: The path to the build context, used by Kaniko - within the workspace
+      default: .
     - name: pathToYamlFile
       description: The path to the yaml file to deploy within the git source
-      default: deploy.yaml
+      default: config.yaml
     - name: imageUrl
       description: Url of image repository
       default: deploy_target
@@ -21,6 +24,8 @@ spec:
     taskRef:
       name: build-image-from-source
     params:
+      - name: pathToContext
+        value: "$(params.pathToContext)"
       - name: imageUrl
         value: "$(params.imageUrl)"
       - name: imageTag
@@ -35,6 +40,8 @@ spec:
     runAfter:
       - build-image-from-source
     params:
+      - name: pathToContext
+        value: "$(params.pathToContext)"
       - name: pathToYamlFile
         value: "$(params.pathToYamlFile)"
       - name: imageUrl
