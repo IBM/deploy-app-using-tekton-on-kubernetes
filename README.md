@@ -31,7 +31,7 @@ This tutorial takes about 40 minutes, after pre-requisites configuration.
 
 ## Section 1 - To build and deploy an application on Kubernetes Service using kubectl
 
-Once application code is completed, the following are the steps which we perform usually to build and deploy an application on Kubernetes cluster. 
+Once the coding of your application is completed, the following are the steps which we perform usually to build and deploy an application on Kubernetes cluster. 
 -	Build the container image using Dockerfile
 -	Push the built container image to the accessible container registry
 -	Create a Kubernetes deployment from the image and deploy the application to an IBM Cloud Kubernetes Service cluster using configuration(yaml) files. The configuration files contain instructions to deploy the container image of application in Pod and then expose it as service.
@@ -61,7 +61,7 @@ For example, deploy target for US-South region will be:
 **Deploy the application** - Run the following commands.
 
 ```
-  cd <downloaded-source-code-repository>
+  cd <downloaded-source-code-repository>/src
   
   # To build and push it to IBM Cloud Container registry. Following command takes care of build and push to container registry and eliminates the overhead to run docker commands individually.
   ibmcloud cr build -t us.icr.io/test_s1/testapp:1.0 .
@@ -69,10 +69,10 @@ For example, deploy target for US-South region will be:
   # To verify whether the image is available in container registry
   ibmcloud cr images 
   
-  #update image path in deploy.yaml
-  sed
+  # Update deploy target in deploy.yaml
+  sed -i '' s#IMAGE#us.icr.io/test_namespace/builtApp:1.0# deploy.yaml
   
-  # run deploy configuration
+  # Run deploy configuration
   kubectl create -f deploy.yaml 
   
   # To verify result
