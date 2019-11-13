@@ -1,5 +1,5 @@
 # *** Work in Progress ***
-# Build and Deploy a sample app on Kubernetes using Tekton Pipeline
+# Build and Deploy a hello-world application on Kubernetes
 
 This tutorial takes you through the steps to deploy an application to Kubernetes Service on IBM Cloud. In this tutorial you learn the following concepts:
 -	To deploy an application on IBM Kubernetes Service(IKS) using kubectl
