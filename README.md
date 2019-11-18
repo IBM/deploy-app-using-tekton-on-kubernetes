@@ -32,8 +32,8 @@ This tutorial takes about 40 minutes, after pre-requisites configuration.
 ## Section 1 - To build and deploy an application on Kubernetes Service using kubectl
 
 Once the coding of your application is completed, the following are the steps which we perform usually to build and deploy an application on Kubernetes cluster. 
--	Build the container image using Dockerfile
--	Push the built container image to the accessible container registry
+-	Package the app into Docker image - Write a Dockerfile for your app and build the container image using Dockerfile
+-	Upload the built container image to the accessible container registry
 -	Create a Kubernetes deployment from the image and deploy the application to an IBM Cloud Kubernetes Service cluster using configuration(yaml) files. The configuration files contain instructions to deploy the container image of application in Pod and then expose it as service.
 
 If you are not using any automated way of CI/CD, then you will be doing all above-mentioned tasks manually as follows. 
@@ -90,6 +90,14 @@ Once application is deployed and you need to make any changes, then you have to 
 ## Section 2 - To build and deploy an application on Kubernetes Service using Tekton Pipeline
 
 Tekton is a powerful and flexible Kubernetes-native open-source framework for creating CI/CD systems. It allows you build, test, and deploy across multiple cloud providers or on-premises systems by abstracting away the underlying implementation details. You can read more about [Tekton](https://github.com/tektoncd/pipeline). The high level concept of Tekton Pipeline can be explained as below.
+
+The Tekton Pipeline project extends the Kubernetes API by five additional custom resource definitions (CRDs) to define pipelines:
+* Task - Task describes individual jobs and defines a set of build steps such as compiling code, running tests, and building and deploying images.
+* Taskrun - A Taskrun runs the Task you defined.
+* Pipeline - Pipeline describes a list of tasks that compose a pipeline.
+* Pipelinerun - Pipelinerun defines the execution of a pipeline. This resource references the Pipeline to run and which PipelineResource(s) to use as input and output.
+* Pipelineresource - It defines an object that is an input (such as a Git repository) or an output (such as a Docker image) of the pipeline.
+
 
 The Tekton Pipeline project extends the Kubernetes API by following custom resource definitions (CRDs):
 * tasks
