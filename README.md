@@ -93,20 +93,10 @@ Tekton is a powerful and flexible Kubernetes-native open-source framework for cr
 
 The Tekton Pipeline project extends the Kubernetes API by five additional custom resource definitions (CRDs) to define pipelines:
 * Task - Task describes individual jobs and defines a set of build steps such as compiling code, running tests, and building and deploying images.
-* Taskrun - A Taskrun runs the Task you defined.
+* Taskrun - A Taskrun runs the Task you defined. With taskrun it is possible to execute a single task, which binds the inputs and outputs of the task
 * Pipeline - Pipeline describes a list of tasks that compose a pipeline.
 * Pipelinerun - Pipelinerun defines the execution of a pipeline. This resource references the Pipeline to run and which PipelineResource(s) to use as input and output.
 * Pipelineresource - It defines an object that is an input (such as a Git repository) or an output (such as a Docker image) of the pipeline.
-
-
-The Tekton Pipeline project extends the Kubernetes API by following custom resource definitions (CRDs):
-* tasks
-* taskrun
-* pipeline
-* pipelinerun
-* pipelineresource
-
-`Tasks` describe individual jobs that can have inputs and outputs, so-called `pipelineresources`. With `taskrun` it is possible to execute a single task, which binds the inputs and outputs of the task to pipelineresources too. A `pipeline` describes a list of tasks and can also be executed by `pipelinerun`. Inputs and outputs are also bound to pipelineresources.
 
 The steps explained in this section guide you to automate the application’s workflow for build and deploy using Tekton Pipeline.
 
