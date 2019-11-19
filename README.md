@@ -93,7 +93,7 @@ Tekton is a powerful and flexible Kubernetes-native open-source framework for cr
 
 The Tekton Pipeline project extends the Kubernetes API by five additional custom resource definitions (CRDs) to define pipelines:
 * Task - Task describes individual jobs and defines a set of build steps such as compiling code, running tests, and building and deploying images.
-* Taskrun - A Taskrun runs the Task you defined. With taskrun it is possible to execute a single task, which binds the inputs and outputs of the task
+* Taskrun - A Taskrun runs the Task you defined. With taskrun it is possible to execute a single task, which binds the inputs and outputs of the task.
 * Pipeline - Pipeline describes a list of tasks that compose a pipeline.
 * Pipelinerun - Pipelinerun defines the execution of a pipeline. This resource references the Pipeline to run and which PipelineResource(s) to use as input and output.
 * Pipelineresource - It defines an object that is an input (such as a Git repository) or an output (such as a Docker image) of the pipeline.
@@ -148,9 +148,9 @@ Apply the file to the cluster using following command.
 
 Deploy an application on Kubernetes Service means deploy application in pod using the built container image in previous step and make it available as a service to access from anywhere. This task uses the deploy.yaml. This task includes two steps:
 
-* `update-yaml` step updates the image url in deploy.yaml. To keep it generic, it is provided as `IMAGE` in deploy.yaml.
+* `update-yaml` step updates the container image url in place of `IMAGE` in deploy.yaml.
 
-* `run-task` step takes care of deployment using kubectl to cluster.
+* `run-task` step deploys the application in Kubernetes pod and create service for the same using kubectl.
  
 All required parameters are passed through params.
 
@@ -162,7 +162,12 @@ Apply the file to the cluster as:
 
 **Create Pipeline**
 
-Pipeline custom resource lists the tasks to be executed and provides the input and output resources and input parameters required by each task. If there is any dependency between the tasks, that also can be addressed. In this example, we are using `runAfter` key to execute the tasks one after the another. Apply this configuration as:
+Pipeline resource lists the tasks to be executed and provides the input and output resources and input parameters required by each task. If there is any dependency between the tasks, that is also addressed. In this tutorial -
+* Pipeline uses two tasks `build-image-from-source` and `deploy-to-cluster`
+* Need to execute the tasks one after the another, hence `runAfter` key is used.
+* Pipelineresource (git repository) is bound through `resources` key.
+
+All required parameters are passed through params. Apply this configuration as:
 
 ```
   kubectl apply -f pipeline/pipeline.yaml
@@ -170,7 +175,7 @@ Pipeline custom resource lists the tasks to be executed and provides the input a
 
 **Create PipelineRun**
 
-All other required resources has been created now. To run the pipeline we need a PipelineRun custom resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, further Pipeline will create TaskRuns and so on. In the similar manner parameters will be substituted to the corresponding task.
+All required resources has been created now. To run the pipeline we need a PipelineRun custom resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, further Pipeline will create TaskRuns and so on. In the similar manner parameters gets substituted to the corresponding task.
 
 The important point to note here is that through pipeline we push images to registry and deploying into cluster, so we need to ensure that it has the sufficient and all required permissions to access container registry and the cluster. The credentials for the registry will be provided by a ServiceAccount. Hence, let us define a service account before executing Pipelinerun.
 
@@ -267,7 +272,7 @@ Events:
   Normal   Succeeded          0s                 pipeline-controller  All Tasks have completed executing
 ```
 
-If it fails, then it shows which task has been failed and also give you more details to check logs. To know more details about any resource like pipeline, task then use following command to get more details.
+If it fails, then it shows which task has been failed and also give you more details to check logs. To know more details about any resource like pipeline, task then use `kubectl describe` command to get more details.
 
 ```
   kubectl describe <resource> <resource-name>
