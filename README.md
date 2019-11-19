@@ -128,11 +128,17 @@ The complete YAML file is available at `tekton-pipeline/resources/git.yaml`. We 
 
 **Create Tasks**
 
-Task resource defines the steps of the pipeline. Here we are creating two tasks as follows.
+Task defines the steps of the pipeline. To deploy an application to cluster using source code in git repository, we have broken into two tasks - `build-image-from-source` and `deploy-to-cluster`.
 
 *Build-image-from-source*
 
-This task will build, tag and push the docker image to the container registry. In this example Kaniko is used to build the image. There are other options also available for this purpose like buildah, podman etc.
+This task includes two steps as follows:
+
+* `list-src` step lists the source code from cloned repository. It is being done just to verify whether source code is cloned properly.
+
+* `build-and-push` step builds the container image using Dockerfile and pushes the built image to the container registry. In this example `Kaniko` is used to build the image. There are other options also available for this purpose like buildah, podman etc. All required parameters are passed through params.
+
+Apply the file to the cluster using following command.
 
 ```
   kubectl apply -f task/build-src-code.yaml
@@ -140,11 +146,16 @@ This task will build, tag and push the docker image to the container registry. I
 
 *Deploy-to-cluster*
 
-Deploy an application on Kubernetes Service means deploy application as pod using the built container image in previous step and make it available as a service to access it from anywhere. This task will use the deploy.yaml. This task defines two steps:
-  -	Update image URL in deploy.yaml
-  -	Apply the configuration file on cluster using kubectl
+Deploy an application on Kubernetes Service means deploy application in pod using the built container image in previous step and make it available as a service to access from anywhere. This task uses the deploy.yaml. This task includes two steps:
 
-Run as: 
+* `update-yaml` step updates the image url in deploy.yaml. To keep it generic, it is provided as `IMAGE` in deploy.yaml.
+
+* `run-task` step takes care of deployment using kubectl to cluster.
+ 
+All required parameters are passed through params.
+
+Apply the file to the cluster as: 
+
 ```
   kubectl apply -f task/deploy-to-cluster.yaml
 ```
