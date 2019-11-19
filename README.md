@@ -114,8 +114,12 @@ More information is available [here](https://github.com/tektoncd/pipeline/blob/m
 
 **Create Pipeline Resource**
 
-In this example, the source code of the application is available in github repository. Hence, need to create the pipeline resource to access the git repository. Here we can configure the url of github repository and the branch of the repository.
-The complete YAML file is available at `tekton-pipeline/resources/git.yaml`. Apply the file to your cluster.
+In the example taken for this tutorial, the source code of the application is available in github repository. Hence, need to create the pipeline resource to access the git repository. To define PipelineResource for git repository, need to configure:
+* `type` as git
+* `url` - git repositoyr URL
+* `revision` as branch of the git repository to be used
+
+The complete YAML file is available at `tekton-pipeline/resources/git.yaml`. We can apply the file to the cluster now.
 
 ```
   cd tekton-pipeline
