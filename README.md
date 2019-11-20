@@ -11,7 +11,7 @@ To complete this tutorial, you need:
 
 * An [IBM Cloud](https://cloud.ibm.com/login) account
 * Get an instance of [Kubernetes Service on IBM Cloud](https://cloud.ibm.com/kubernetes/catalog/cluster). It will take ~20 minutes.
-* Get the access of IKS through `kubectl` CLI using the instructions provided in access tab at:
+* Get the access of Kubernetes Cluster through `kubectl` CLI using the instructions provided in access tab at:
   ```
   IBM Cloud Dashboard -> <your cluster> -> Access Tab
   ```
