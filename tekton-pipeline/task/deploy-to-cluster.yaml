@@ -29,7 +29,7 @@ spec:
         - "-e"
         - "s;IMAGE;$(inputs.params.imageUrl):$(inputs.params.imageTag);g"
         - "$(inputs.resources.git-source.path)/$(inputs.params.pathToContext)/$(inputs.params.pathToYamlFile)"
-    - name: run-task
+    - name: deploy-app
       image: lachlanevenson/k8s-kubectl
       command: ["kubectl"]
       args:
