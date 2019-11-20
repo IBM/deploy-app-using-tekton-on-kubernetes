@@ -181,11 +181,11 @@ All required parameters are passed through params. Parameters value are defined 
 
 **Create PipelineRun**
 
-To execute the pipeline we need a PipelineRun resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, further Pipeline will create TaskRuns and so on. In the similar manner parameters gets substituted to the corresponding task. If a parameter is not defined in PipelineRun, then the default value gets picked-up from the `params` under `spec` from the resource definition itself. For example, `pathToDockerfile` param is used in task `build-image-from-source` but its value is not provided in `pipeline-run.yaml`, so its default value will be used during that task execution.
+To execute the pipeline we need a PipelineRun resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, further Pipeline will create TaskRuns and so on. In the similar manner parameters gets substituted to the corresponding task. If a parameter is not defined in PipelineRun, then the default value gets picked-up from the `params` under `spec` from the resource definition itself. For example, `pathToDockerfile` param is used in task `build-image-from-source` but its value is not provided in `pipeline-run.yaml`, so its default value defined in `~/tekton-pipeline/build-src-code.yaml` will be used during the task execution.
 
 In PipelineRun definition `tekton-pipeline/pipeline/pipeline-run.yaml`:
 
-* It references the Pipeline `create-pipeline` created through `pipeline.yaml`.
+* It references the Pipeline `application-pipeline` created through `pipeline.yaml`.
 * It references the PipelineResource `git` to use as input.
 * It provides the value of parameters under `params` which are required during the execution of pipeline and the tasks.
 * A service account is specified.
@@ -207,7 +207,7 @@ To generate API key using IBM Cloud Dashboard, follow the instructions given [he
   cat key_file.json | grep apikey
 ```
 
-Copy the `apikey` for the next step.
+Copy the `apikey`, it will be used in the next step.
 
 *Create Secret* 
 
