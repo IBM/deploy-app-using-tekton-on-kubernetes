@@ -91,7 +91,7 @@ This way application gets deployed on Kubernetes Cluster using CLIs. If you make
 
 ## Section 2 - To build and deploy an application on IBM Cloud Kubernetes Service using Tekton Pipeline
 
-Tekton is a powerful and flexible Kubernetes-native open-source framework for creating CI/CD systems. It allows you build, test, and deploy across multiple cloud providers or on-premises systems by abstracting away the underlying implementation details. You can read more about [Tekton](https://github.com/tektoncd/pipeline). The high level concept of Tekton Pipeline can be explained as below.
+[Tekton](https://github.com/tektoncd/pipeline) is a powerful and flexible Kubernetes-native open-source framework for creating CI/CD systems. It allows you build, test, and deploy across multiple cloud providers or on-premises systems by abstracting away the underlying implementation details. The high level concept of Tekton Pipeline can be explained as below.
 
 The Tekton Pipeline project extends the Kubernetes API by five additional custom resource definitions (CRDs) to define pipelines:
 * Task - Task describes individual jobs and defines a set of build steps such as compiling code, running tests, and building and deploying images.
