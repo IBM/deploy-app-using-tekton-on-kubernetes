@@ -4,7 +4,7 @@ metadata:
   name: application-pipeline-run
 spec:
   pipelineRef:
-    name: create-pipeline
+    name: application-pipeline
   resources:
     - name: git-source
       resourceRef:
