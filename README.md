@@ -1,7 +1,7 @@
 
 # Build and Deploy a hello-world application on Kubernetes
 
-We are seeing growing popularity of sofware development and deployment on container based environments using Docker and Kubernetes. Since it is easy to replicate the environment, developers generally create applications on their desktop, debug and test them locally. Later they build and deploy to a Kubernetes cluster. 
+We are seeing growing popularity of sofware deployment on container based environments using Docker and Kubernetes. Since it is easy to replicate the environment, developers generally create applications on their desktop, debug and test them locally. Later they build and deploy to a Kubernetes cluster. 
 
 In this tutorial, we will cover the steps involved in deploying an application to the Kubernetes Cluster on IBM Cloud using the below two methods:
 - Using a kubectl CLI without any devops pipeline
