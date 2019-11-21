@@ -1,9 +1,11 @@
-# *** Work in Progress ***
+
 # Build and Deploy a hello-world application on Kubernetes
 
-These days industries are adopting container enabled environments like Docker and Kubernetes. Generally developers create applications on their desktop, debug them locally, and then build and deploy to the container environment. This tutorial helps you to understand the steps involved to deploy an application to Kubernetes Service on IBM Cloud. At the end of this tutorial, you will learn how to build and deploy an application on IBM Cloud Kubernetes Service:
--	using kubectl CLI without any devops pipeline
--	using Tekton (Kubernetes style CI/CD) Pipeline 
+We are seeing growing popularity of sofware development and deployment on container based environments using Docker and Kubernetes. Since it is easy to replicate the environment, developers generally create applications on their desktop, debug and test them locally. Later they build and deploy to a Kubernetes cluster. 
+
+In this tutorial, we will cover the steps involved in deploying an application to the Kubernetes Cluster on IBM Cloud using the below two methods:
+- Using a kubectl CLI without any devops pipeline
+- Using a Tekton (Kubernetes style CI/CD) Pipeline
 
 ## Pre-requisites
 
@@ -31,10 +33,11 @@ This tutorial takes about 40 minutes, after pre-requisites configuration.
 
 ## Section 1 - To build and deploy an application on IBM Cloud Kubernetes Service using kubectl
 
-Generally the following steps are performed to build and deploy an application on Kubernetes cluster after completing the code of an application.
--	Package the app into Docker container image - Write a Dockerfile for your app and build the container image using Dockerfile
--	Upload the built container image to the accessible container registry
--	Create a Kubernetes deployment using the container image and deploy the application to an IBM Cloud Kubernetes Service cluster using configuration(yaml) files. The configuration files contain instructions to deploy the container image of application in Pod and then expose it as a service to access through API
+The following steps are performed to build and deploy an application on Kubernetes cluster.
+
+-	Write a Dockerfile for your application and build the container image using Dockerfile.
+-	Upload the built container image to the accessible container registry.
+-	Create a Kubernetes deployment using the container image and deploy the application to an IBM Cloud Kubernetes Service cluster using configuration(yaml) files.
 
 For this tutorial, we have taken the simple hello-world nodejs application to deploy on Kubernetes as shown.
 
@@ -53,7 +56,7 @@ For this tutorial, we have taken the simple hello-world nodejs application to de
 
   module.exports.app = app;
 ```
-The Dockerfile and deployment configuration file is also available in git repository at `~/src`. The steps explained in this section help you to deploy your application to cluster using CLIs.
+The dockerfile `Dockerfile` and the deployment configuration `deploy.yaml` is available in [github repository](https://github.com/IBM/deploy-app-using-tekton-on-kubernetes) that is cloned earlier. The steps explained in this section help you to deploy your application to cluster using CLIs.
 
 **Setup deploy target**
 
@@ -66,13 +69,13 @@ The following command tells you the Registry API endpoint for your cluster. You 
 ```
    ibmcloud cr api
 ```
-To get namespace use the following command:
+To get namespace use the following command.
 ```
    ibmcloud cr namespaces
 ```
 For example, deploy target for US-South region will be:
 ```
-   us.icr.io/namespace-name/image-name:image-tag
+   us.icr.io/test_namespace/builtApp:1.0
 ```
 
 **Deploy the application**
@@ -80,7 +83,7 @@ For example, deploy target for US-South region will be:
 Run the following commands to deploy application on Kubernetes cluster.
 
 ```
-  cd <downloaded-source-code-repository>/src
+  cd ~/deploy-app-using-tekton-on-kubernetes/src
   
   # Build and push it to IBM Cloud Container registry. Following command takes care of build and push to container registry and eliminates the overhead to run docker commands individually.
   ibmcloud cr build -t us.icr.io/test_namespace/builtApp:1.0 .
@@ -105,7 +108,7 @@ After successful deployment, application is accessible at:
 ```
 where the public IP of Kubernetes Cluster can be retrieved from IBM Cloud dashboard and the port 32426 is defined as nodePort in deploy.yaml.
 
-This way application gets deployed on Kubernetes Cluster using CLIs. If you make any change in application after deployment, then you need to re-run the steps again. In order to build, test, and deploy application faster and more reliably, need to automate the entire workflow. We should follow the modern development practices that is continuous integration and delivery (CI/CD) as it reduces the overhead of development and deployment process and saves significant time and effort. The next section of this tutorial explains the build and deploy approach using Tekton Pipelines.
+This way application gets deployed on Kubernetes Cluster using CLIs. If you make any change in application after deployment, then you need to re-run the steps again. In order to build, test, and deploy application faster and more reliably, need to automate the entire workflow. We can follow continuous integration and delivery (CI/CD) methodology to reduce the overhead of development and manual deployment process. This can save significant time and effort. The next section of this tutorial explains the build and deploy approach using Tekton Pipelines.
 
 ## Section 2 - To build and deploy an application on IBM Cloud Kubernetes Service using Tekton Pipeline
 
@@ -137,8 +140,10 @@ For more information on this, refer [here](https://github.com/tektoncd/pipeline/
 
 **Create Pipeline Resource**
 
-In the example taken for this tutorial, the source code of the application, Dockerfile and deployment configuration is available in github repository at `~/src`. Hence, need to create the input pipeline resource to access the git repository. To define PipelineResource for git repository, we configure:
-* Resource `type` as git
+In the example taken for this tutorial, the source code of the application, Dockerfile and deployment configuration is available in [github repository](https://github.com/IBM/deploy-app-using-tekton-on-kubernetes) that we cloned earlier. Now we will create the input pipeline resource to access the git repository. 
+
+In the `git.yaml` file, define PipelineResource for git repository:
+* Specify resource `type` as git
 * Provide git repository URL as `url`
 * `revision` as the name of the branch of the git repository to be used
 
@@ -169,7 +174,7 @@ All required parameters are passed through params. Apply the file to the cluster
 
 *Deploy-to-cluster*
 
-Deploy an application on Kubernetes Service means deploy application in pod using the built container image and make it available as a service to access from anywhere. This task uses the deployment configuration located as `~/src/deploy.yaml`. This task includes two steps:
+Now let us deploy application in a pod using the built container image, and make it available as a service to access from anywhere. This task uses the deployment configuration located as `~/src/deploy.yaml`. This task includes two steps:
 
 * `update-yaml` step updates the container image url in place of `IMAGE` in deploy.yaml.
 
@@ -185,11 +190,11 @@ Apply the file to the cluster as:
 
 **Create Pipeline**
 
-Pipeline lists the tasks to be executed and provides the input and output resources and input parameters required by each task. If there is any dependency between the tasks, that is also addressed. In the `tekton-pipeline/resources/pipeline.yaml` :
+Pipeline lists the tasks to be executed. It provides the input, output resources and input parameters required by each task. If there is any dependency between the tasks, that is also addressed. In the `tekton-pipeline/resources/pipeline.yaml` :
 
-* Pipeline uses the above mentioned tasks `build-image-from-source` and `deploy-to-cluster`
-* Need to execute the tasks one after the another, hence `runAfter` key is used.
-* Pipelineresource (git repository) is provided through the `resources` key.
+* Pipeline uses the above mentioned tasks `build-image-from-source` and `deploy-to-cluster`.
+* The `runAfter` key is used here because we need to execute the tasks one after the another.
+* PipelineResource (git repository) is provided through the `resources` key.
 
 All required parameters are passed through params. Parameters value are defined in pipeline as `$(params.imageUrl)` which is different than the args in task definition. Apply this configuration as:
 
@@ -199,7 +204,7 @@ All required parameters are passed through params. Parameters value are defined 
 
 **Create PipelineRun**
 
-To execute the pipeline we need a PipelineRun resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, further Pipeline will create TaskRuns and so on. In the similar manner parameters gets substituted to the corresponding task. If a parameter is not defined in PipelineRun, then the default value gets picked-up from the `params` under `spec` from the resource definition itself. For example, `pathToDockerfile` param is used in task `build-image-from-source` but its value is not provided in `pipeline-run.yaml`, so its default value defined in `~/tekton-pipeline/build-src-code.yaml` will be used during the task execution.
+To execute the pipeline we need a PipelineRun resource definition. All required parameters will be passed from PipelineRun. PipelineRun will trigger Pipeline, and Pipeline will create TaskRuns and so on. In a similar manner all parameters get substituted down to the tasks. If a parameter is not defined in PipelineRun, then the default value gets picked-up from the `params` under `spec` from the resource definition itself. For example, `pathToDockerfile` param is used in task `build-image-from-source` but its value is not provided in `pipeline-run.yaml`, so its default value defined in `~/tekton-pipeline/build-src-code.yaml` will be used during the task execution.
 
 In PipelineRun definition `tekton-pipeline/pipeline/pipeline-run.yaml`:
 
@@ -208,13 +213,13 @@ In PipelineRun definition `tekton-pipeline/pipeline/pipeline-run.yaml`:
 * It provides the value of parameters under `params` which are required during the execution of pipeline and the tasks.
 * A service account is specified.
 
-The important point to note here is that through pipeline we push images to registry and deploying into cluster, so we need to ensure that it has the sufficient and all required permissions to access container registry and the cluster. The credentials for the registry will be provided by a ServiceAccount. Hence, let us define a service account before executing Pipelinerun.
+The important point to note here is that through pipeline we push images to registry and deploy it to a cluster. So, we need to ensure that it has the sufficient privileges to access container registry and the cluster. The credentials for the registry will be provided by a ServiceAccount. Hence, we define a service account before executing Pipelinerun.
 
 > Note: Do not apply the PipelineRun file yet because you still need to define the service account for it.
 
 **Create Service Account**
 
-To access the protected resources, need to setup a service account which uses secrets to create or modify Kubernetes resources. IBM Cloud Kubernetes Service is configured to use IBM Cloud Identity and Access Management (IAM) roles. These roles determine the actions that users can perform on IBM Cloud Kubernetes. 
+To access the protected resources, let us setup a service account which uses secrets to create or modify Kubernetes resources. IBM Cloud Kubernetes Service is configured to use IBM Cloud Identity and Access Management (IAM) roles. These roles determine the actions that users can perform on IBM Cloud Kubernetes. 
 
 *Generate API Key*
 
@@ -243,9 +248,9 @@ It creates a secret named as `ibm-cr-secret` which will be used in configuration
 
 In the configuration file `tekton-pipeline/pipeline/service-account.yaml`:
 
-* serviceaccount resource uses the secret generated above `ibm-cr-secret`.
+* ServiceAccount resource uses the secret generated above `ibm-cr-secret`.
 * As per the definition of Secret resource, the newly built secret is populated with an API token for the service account. 
-* The next step is to define roles. A Role can only be used to grant access to resources within a single namespace. Need to include appropriate resources and apiGroups in rules otherwise it fails with access issues.
+* The next step is to define roles. A Role can only be used to grant access to resources within a single namespace. Include appropriate resources and apiGroups in rules without which it fails with access issues.
 * A role binding grants the permissions defined in a role to a user or set of users. It holds a list of subjects (users, groups, or service accounts), and a reference to the role being granted. 
 
 Apply this configuration as:
@@ -255,11 +260,11 @@ Apply this configuration as:
 ```
 **Execute the Pipeline**
 
-Before executing Pipelinerun, modify `imageUrl` and `imageTag` in `tekton-pipeline/pipeline/pipelinerun.yaml`. Refer `Setup Deploy Target` section above to decide on image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *latest*, then update configuration file as:
+Before executing Pipelinerun, modify `imageUrl` and `imageTag` in `tekton-pipeline/pipeline/pipelinerun.yaml`. Refer `Setup Deploy Target` section above to decide on image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *1.0*, then update configuration file as:
 
 ```
   sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipeline/pipelinerun.yaml
-  sed -i '' s#IMAGE_TAG#latest# pipeline/pipelinerun.yaml
+  sed -i '' s#IMAGE_TAG#1.0# pipeline/pipelinerun.yaml
 ```
 
 Now, create the pipelinerun configuration.
@@ -268,17 +273,17 @@ Now, create the pipelinerun configuration.
   kubectl create -f pipeline/pipeline-run.yaml
 ```
 
-It will create pipeline and you will get message on terminal as:
+It will create pipeline with a below message on terminal.
 ```
   pipelinerun.tekton.dev/application-pipeline-run created
 ```
 
-To check the status of the pipeline created,
+To check the status of the pipeline created:
 ```
   kubectl describe pipelinerun application-pipeline-run
 ```
 
-You may need to re-run this command till pipeline execution is not completed. It should show the interim status as:
+You may need to re-run this command based on the status. It shows the interim status as:
 
 <pre>
 Status:
@@ -313,7 +318,7 @@ Events:
   Normal   Succeeded          0s                 pipeline-controller  <b>All Tasks have completed executing</b>
 </pre>
 
-If it fails, then it shows which task has been failed and also give you more details to check logs. To know more details about a resource say pipeline then use `kubectl describe` command to get more details.
+In case of failure it shows which task has failed. It also gives you the additional details to check logs. To know more details about a resource say pipeline, use `kubectl describe` command to get information.
 
 ```
   kubectl describe <resource> <resource-name>
@@ -342,13 +347,13 @@ After successful execution of pipelinerun, the application is accessible at:
 ```
   http://<public-ip-of-kubernetes-cluster>:32426/
 ```
-where the public IP of Kubernetes Cluster can be retrieved from IBM Cloud dashboard and the port 32426 is defined as nodePort in deploy.yaml.
+where the public IP of Kubernetes Cluster can be retrieved from IBM Cloud dashboard, and the port 32426 is defined as nodePort in deploy.yaml.
 
-In this way you deploy your application using Tekton Pipeline. This tutorial covers the basics of Tekton Pipeline to get you started building your own pipelines. There are more features available like webhooks, web based dashboards and more. Do try it out with IBM Cloud Kubernetes Service.
+In this way you deploy your application using Tekton Pipeline. This tutorial covers the basics of Tekton Pipeline to get you started on building your own pipelines. There are more features available like webhooks, web based dashboards. Do try it out with IBM Cloud Kubernetes Service.
 
 ## Next Steps
 
-Tekton is one of the tools available in open source project Kabanero. [Kabanero](https://kabanero.io/) brings together key technologies into a microservices-based framework for building modern cloud-native applications. Kabanero has Codewind which helps to build cloud-native applications, Appsody which helps to build and deploy cloud-native applications and Tekton which is Kubernetes style CI/CD pipeline. Each project has its own open source community and independent releases. The Kabanero open source project is included within [IBM Cloud Pak for Applications](https://cloud.ibm.com/catalog/content/ibm-cp-applications) as Kabanero Enterprise. Cloud Pak for Applications provides a faster, more secure way to move your business applications to cloud, in container enabled environment. Cloud Pak for Applications is built and supported on Red Hat OpenShift. Explore and try out with the help of this [developer guide](https://developer.ibm.com/series/developers-guide-to-ibm-cloud-pak-for-applications/).
+Tekton is one of the tools available in the open source project Kabanero. [Kabanero](https://kabanero.io/) brings together key technologies into a microservices-based framework for building modern cloud-native applications. Kabanero has Codewind which helps to build cloud-native applications, Appsody which helps to build and deploy cloud-native applications and Tekton which is Kubernetes style CI/CD pipeline. Each project has its own open source community and independent releases. The Kabanero open source project is included within [IBM Cloud Pak for Applications](https://cloud.ibm.com/catalog/content/ibm-cp-applications) as Kabanero Enterprise. The Cloud Pak for Applications provides a faster, more secure way to move your business applications to cloud, in container enabled environment. Cloud Pak for Applications is built and supported on Red Hat OpenShift. Explore and try out with the help of this [developer guide](https://developer.ibm.com/series/developers-guide-to-ibm-cloud-pak-for-applications/).
 
 
 ## Related Links
