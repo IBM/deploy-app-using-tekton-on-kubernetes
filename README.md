@@ -357,7 +357,6 @@ Tekton is one of the tools available in the open source project Kabanero. [Kaban
 
 
 ## Related Links
-* [Tekton Pipelines](https://github.com/tektoncd/pipeline#-tekton-pipelines)
 * [Deploy a Knative application using Tekton-Pipelines](https://developer.ibm.com/tutorials/knative-build-app-development-with-tekton/)
 * [Codewind + Appsody + Tekton = Easier Cloud-Native Development](https://www.ibm.com/cloud/blog/codewind-appsody-tekton-means-easier-cloud-native-development)
 * [Kabanero: Development tools and runtimes powering IBM Cloud Pak for Applications](https://www.ibm.com/cloud/blog/kabanero-microservices-cloud-native-apps-faster)
