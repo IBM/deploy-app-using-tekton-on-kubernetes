@@ -1,7 +1,7 @@
 # *** Work in Progress ***
 # Build and Deploy a hello-world application on Kubernetes
 
-These days industries are adopting container enabled environments like Docker and Kubernetes. Generally developers create applications on their desktop, debug them locally, and then build and deploy to the container environment. This tutorial helps you to understand the steps involved to deploy an application to Kubernetes Service on IBM Cloud. At the end of this tutorial, you will learn how to build and deploy an application on IBM Cloud Kubernetes Service :
+These days industries are adopting container enabled environments like Docker and Kubernetes. Generally developers create applications on their desktop, debug them locally, and then build and deploy to the container environment. This tutorial helps you to understand the steps involved to deploy an application to Kubernetes Service on IBM Cloud. At the end of this tutorial, you will learn how to build and deploy an application on IBM Cloud Kubernetes Service:
 -	using kubectl CLI without any devops pipeline
 -	using Tekton (Kubernetes style CI/CD) Pipeline 
 
@@ -31,12 +31,29 @@ This tutorial takes about 40 minutes, after pre-requisites configuration.
 
 ## Section 1 - To build and deploy an application on IBM Cloud Kubernetes Service using kubectl
 
-Once the coding of your application is completed, the following are the steps which we perform usually to build and deploy an application on Kubernetes cluster. 
+Generally the following steps are performed to build and deploy an application on Kubernetes cluster after completing the code of an application.
 -	Package the app into Docker container image - Write a Dockerfile for your app and build the container image using Dockerfile
 -	Upload the built container image to the accessible container registry
 -	Create a Kubernetes deployment using the container image and deploy the application to an IBM Cloud Kubernetes Service cluster using configuration(yaml) files. The configuration files contain instructions to deploy the container image of application in Pod and then expose it as a service to access through API
 
-The Dockerfile and deployment configuration file is already available in git repository at `~/src`. The steps explained in this section guide you to deploy your application to cluster using CLIs.
+For this tutorial, we have taken the simple hello-world nodejs application to deploy on Kubernetes as shown.
+
+```
+  const app = require('express')()
+
+  app.get('/', (req, res) => {
+    res.send("Hello from Appsody!");
+  });
+
+  var port = 3300;
+
+  var server = app.listen(port, function () {
+    console.log("Server listening on " + port);
+  })
+
+  module.exports.app = app;
+```
+The Dockerfile and deployment configuration file is also available in git repository at `~/src`. The steps explained in this section help you to deploy your application to cluster using CLIs.
 
 **Setup deploy target**
 
@@ -82,12 +99,13 @@ Run the following commands to deploy application on Kubernetes cluster.
   kubectl get service
 ```
 
-Get the public IP of Kubernetes Cluster on IBM Cloud and access the application on 32426 port as this port is used in deploy.yaml.
+After successful deployment, application is accessible at: 
 ```
-  http://<public-ip-of kubernetes-cluster>:32426/
+  http://<public-ip-of-kubernetes-cluster>:32426/
 ```
+where the public IP of Kubernetes Cluster can be retrieved from IBM Cloud dashboard and the port 32426 is defined as nodePort in deploy.yaml.
 
-This way application gets deployed on Kubernetes Cluster using CLIs. If you make more changes in application after deploy, then you have to re-run the steps again. In order to build, test, and deploy application faster and more reliably, need to automate the entire workflow. We should follow the modern development practices that is continuous integration and delivery (CI/CD) as it reduces the overhead of development and deployment process and saves significant time and effort. The next section of this tutorial explains the build and deploy approach using Tekton Pipelines.
+This way application gets deployed on Kubernetes Cluster using CLIs. If you make any change in application after deployment, then you need to re-run the steps again. In order to build, test, and deploy application faster and more reliably, need to automate the entire workflow. We should follow the modern development practices that is continuous integration and delivery (CI/CD) as it reduces the overhead of development and deployment process and saves significant time and effort. The next section of this tutorial explains the build and deploy approach using Tekton Pipelines.
 
 ## Section 2 - To build and deploy an application on IBM Cloud Kubernetes Service using Tekton Pipeline
 
@@ -122,7 +140,7 @@ For more information on this, refer [here](https://github.com/tektoncd/pipeline/
 In the example taken for this tutorial, the source code of the application, Dockerfile and deployment configuration is available in github repository at `~/src`. Hence, need to create the input pipeline resource to access the git repository. To define PipelineResource for git repository, we configure:
 * Resource `type` as git
 * Provide git repository URL as `url`
-* `revision` as name of the branch of the git repository to be used
+* `revision` as the name of the branch of the git repository to be used
 
 The complete YAML file is available at `~/tekton-pipeline/resources/git.yaml`. Apply the file to the cluster as shown.
 
@@ -320,10 +338,11 @@ To verify whether pod and service is running as expected, check the output of th
 
 </pre>
 
-Get the public IP of Kubernetes Cluster on IBM Cloud and access the application on 32426 port as this port is used in deploy.yaml.
+After successful execution of pipelinerun, the application is accessible at:
 ```
-  http://<public-ip-of kubernetes-cluster>:32426/
+  http://<public-ip-of-kubernetes-cluster>:32426/
 ```
+where the public IP of Kubernetes Cluster can be retrieved from IBM Cloud dashboard and the port 32426 is defined as nodePort in deploy.yaml.
 
 In this way you deploy your application using Tekton Pipeline. This tutorial covers the basics of Tekton Pipeline to get you started building your own pipelines. There are more features available like webhooks, web based dashboards and more. Do try it out with IBM Cloud Kubernetes Service.
 
