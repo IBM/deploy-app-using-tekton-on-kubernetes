@@ -277,8 +277,8 @@ Apply this configuration as:
 Before executing Pipelinerun, modify `imageUrl` and `imageTag` in `tekton-pipeline/pipeline/pipelinerun.yaml`. Refer to the `Setup Deploy Target` section above to decide on an image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *1.0*, then update configuration file as:
 
 ```
-  sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipeline/pipelinerun.yaml
-  sed -i '' s#IMAGE_TAG#1.0# pipeline/pipelinerun.yaml
+  sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipeline/pipeline-run.yaml
+  sed -i '' s#IMAGE_TAG#1.0# pipeline/pipeline-run.yaml
 ```
 
 Now, create the pipelinerun configuration.
