@@ -274,7 +274,7 @@ Apply this configuration as:
 ```
 ### 7.Execute the Pipeline
 
-Before executing Pipelinerun, modify `imageUrl` and `imageTag` in `tekton-pipeline/pipeline/pipelinerun.yaml`. Refer to the `Setup Deploy Target` section above to decide on an image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *1.0*, then update configuration file as:
+Before executing Pipelinerun, modify `imageUrl` and `imageTag` in `tekton-pipeline/pipeline/pipeline-run.yaml`. Refer to the `Setup Deploy Target` section above to decide on an image URL and tag. If imageURL is *us.icr.io/test_namespace/builtApp* and image tag is *1.0*, then update configuration file as:
 
 ```
   sed -i '' s#IMAGE_URL#us.icr.io/test_namespace/builtApp# pipeline/pipeline-run.yaml
